@@ -11,7 +11,6 @@ import pieces.Pawn;
 import pieces.Piece;
 import pieces.Queen;
 import pieces.Rook;
-import sun.nio.cs.HistoricallyNamedCharset;
 
 public class Game {
 	private long id;
@@ -47,7 +46,7 @@ public class Game {
 		getBoard()[piece.getCurrentRow()][piece.getCurrentColumn()] = piece;
 	}
 
-	private boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn) {
+	public boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn) {
 		Piece piece = getBoard()[fromRow][fromColumn];
 		if (piece == null || piece.getColor() != currentTurnColor)
 			return false;

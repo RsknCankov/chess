@@ -19,7 +19,7 @@ public class Pawn extends Piece {
 		moves.add(new TwoSquareMove(toRow, toColumn, this));
 		moves.add(new CaptureMove(-1, toRow, toColumn, this));
 		moves.add(new CaptureMove(1, toRow, toColumn, this));
-		return null;
+		return moves;
 	}
 	class SingleSquareMove extends SimpleMove{
 

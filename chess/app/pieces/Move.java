@@ -43,7 +43,7 @@ public abstract class Move {
 		int currRow = piece.getCurrentRow() + dx;
 		int currColumn = piece.getCurrentColumn() + dy;
 		int remainingSteps = allowedSteps - 1;
-		while (remainingSteps > 0 && currRow >= 0 && currRow < 8 && currColumn >= 0 && currColumn < 8) {
+		while (remainingSteps >= 0 && currRow >= 0 && currRow < 8 && currColumn >= 0 && currColumn < 8) {
 			if (currRow == toRow && currColumn == toColumn)
 				return true;
 			if (game.getBoard()[currRow][currColumn] != null)
