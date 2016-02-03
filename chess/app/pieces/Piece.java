@@ -8,8 +8,8 @@ import models.Game;
 public abstract class Piece {
 	protected Color color;
 	protected Game game;
-	private int currentRow;
-	private int currentColumn;
+	protected int currentRow;
+	protected int currentColumn;
 
 	public Piece(Game game, Color color, int currRow, int currColumn) {
 		this.color = color;

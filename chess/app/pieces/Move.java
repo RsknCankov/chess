@@ -12,6 +12,8 @@ public abstract class Move {
 	protected int toRow;
 	protected int toColumn;
 	protected Game game;
+	private int fromRow;
+	private int fromColumn;
 
 	public Move(int dx, int dy, int toRow, int toColumn, int allowedSteps, Piece piece) {
 		this.dx = dx;
@@ -21,6 +23,8 @@ public abstract class Move {
 		this.toRow = toRow;
 		this.toColumn = toColumn;
 		this.game = piece.game;
+		this.fromRow = piece.getCurrentRow();
+		this.fromColumn = piece.getCurrentColumn();
 	}
 
 	public int getDx() {
@@ -67,6 +71,14 @@ public abstract class Move {
 		for(MoveEffect effect : getEffects()){
 			effect.apply();
 		}
+	}
+
+	public int getFromRow() {
+		return fromRow;
+	}
+
+	public int getFromColumn() {
+		return fromColumn;
 	}
 
 }
