@@ -23,5 +23,10 @@ public class Rook extends Piece {
 		return moves;
 	}
 
+	@Override
+	public Piece clone() {
+		return new Rook(getGame(), color, currentRow, currentColumn);
+	}
+
 	 
 }

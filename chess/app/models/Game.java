@@ -25,6 +25,26 @@ public class Game {
 		placePawnsRows(Color.BLACK);
 	}
 
+	public Game clone() {
+		Game newGame = new Game();
+		Piece[][] newBoard = new Piece[8][8];
+		for(int i=0; i<newBoard.length; ++i){
+			for(int j=0; j<newBoard[i].length; ++j){
+				if(board[i][j] != null){
+					newBoard[i][j] = board[i][j].clone();
+					newBoard[i][j].setGame(newGame);
+				}
+			}
+		}
+		newGame.id = id;
+		newGame.board = newBoard;
+		newGame.currentTurnColor = currentTurnColor;
+		List<Move> newMoves = new ArrayList<>();
+		newMoves.addAll(movesHistory);
+		newGame.movesHistory = newMoves;
+		return newGame;
+	}
+
 	private void placeFirstRow(Color color) {
 		placePiece(new Rook(this, color, color.getFirstRow(), 1));
 		placePiece(new Knight(this, color, color.getFirstRow(), 1));
@@ -65,12 +85,30 @@ public class Game {
 	public List<Move> getMovesHistory() {
 		return movesHistory;
 	}
-	public boolean wasMoved(int x, int y){
-		for(Move move : movesHistory){
-			if(move.getFromRow() == x && move.getFromColumn() == y){
+
+	public boolean wasMoved(int x, int y) {
+		for (Move move : movesHistory) {
+			if (move.getFromRow() == x && move.getFromColumn() == y) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	public Color colorInCheck() {
+		for (int fromRow = 0; fromRow < 8; ++fromRow) {
+			for (int fromColumn = 0; fromColumn < 8; ++fromColumn) {
+				for (int toRow = 0; toRow < 8; ++toRow) {
+					for (int toColumn = 0; toColumn < 8; ++toColumn) {
+						Piece fromPiece = getBoard()[fromRow][fromColumn];
+						Piece toPiece = getBoard()[toRow][toColumn];
+						if (fromPiece != null && toPiece != null && toPiece instanceof King) {
+							return toPiece.getColor();
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 }

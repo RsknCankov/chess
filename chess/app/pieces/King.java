@@ -24,10 +24,12 @@ public class King extends Piece {
 		moves.add(new CastlingMove(0, 2, toRow, toColumn, 1, this));
 		return moves;
 	}
-	class CastlingMove extends SimpleMove{
+
+	class CastlingMove extends SimpleMove {
 		public CastlingMove(int dx, int dy, int toRow, int toColumn, int allowedSteps, Piece piece) {
 			super(dx, dy, toRow, toColumn, allowedSteps, piece);
 		}
+
 		@Override
 		protected boolean satisfiesConditions() {
 			if(!(currentRow == toRow && toRow == piece.getColor().getFirstRow()&& Math.abs(currentColumn - toColumn)==2 )){
@@ -47,25 +49,33 @@ public class King extends Piece {
 					isPathClear = false;
 				}
 			}
-			return werentMoved && isPathClear;
+			Color colorInCheck = game.colorInCheck();
+			boolean notCurrentlyChecked = colorInCheck==null || colorInCheck!=color;
+			return werentMoved && isPathClear && notCurrentlyChecked;
 		}
+
 		@Override
 		public List<MoveEffect> getEffects() {
 			List<MoveEffect> effects = super.getEffects();
 			effects.add(new MoveEffect() {
 				@Override
 				public void apply() {
-					if(toColumn > currentColumn){
-						game.getBoard()[toRow][toColumn-1] = game.getBoard()[toRow][7];
+					if (toColumn > currentColumn) {
+						game.getBoard()[toRow][toColumn - 1] = game.getBoard()[toRow][7];
 						game.getBoard()[toRow][7] = null;
 					} else {
-						game.getBoard()[toRow][toColumn+1] = game.getBoard()[toRow][0];
+						game.getBoard()[toRow][toColumn + 1] = game.getBoard()[toRow][0];
 						game.getBoard()[toRow][0] = null;
 					}
 				}
 			});
 			return effects;
 		}
+	}
+
+	@Override
+	public Piece clone() {
+		return new King(getGame(), color, currentRow, currentColumn);
 	}
 
 }

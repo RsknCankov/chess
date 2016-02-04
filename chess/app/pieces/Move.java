@@ -2,6 +2,7 @@ package pieces;
 
 import java.util.List;
 
+import models.Color;
 import models.Game;
 
 public abstract class Move {
@@ -22,7 +23,7 @@ public abstract class Move {
 		this.piece = piece;
 		this.toRow = toRow;
 		this.toColumn = toColumn;
-		this.game = piece.game;
+		this.game = piece.getGame();
 		this.fromRow = piece.getCurrentRow();
 		this.fromColumn = piece.getCurrentColumn();
 	}
@@ -60,7 +61,18 @@ public abstract class Move {
 	}
 
 	public boolean isLegal() {
-		return canReachEnd() && satisfiesConditions();
+		return canReachEnd() && satisfiesConditions() && !leavesCurrentPlayerInCheck();
+	}
+
+	private boolean leavesCurrentPlayerInCheck() {
+		Game oldGame = game;
+		Game futureGame = game.clone();
+		game = futureGame;
+		applyEffects();
+		Color checkedColor = game.colorInCheck();
+		boolean leavesCurrentPlayerInCheck = checkedColor == piece.color;
+		game = oldGame;
+		return leavesCurrentPlayerInCheck;
 	}
 
 	protected boolean satisfiesConditions() {

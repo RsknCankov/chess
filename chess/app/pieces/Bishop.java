@@ -23,5 +23,10 @@ public class Bishop extends Piece {
 		return moves;
 	}
 
+	@Override
+	public Piece clone() {
+		return new Bishop(getGame(), color, currentRow, currentColumn);
+	}
+
 	
 }

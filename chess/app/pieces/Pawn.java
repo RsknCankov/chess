@@ -80,4 +80,8 @@ public class Pawn extends Piece {
 		}
 		
 	}
+	@Override
+	public Piece clone() {
+		return new Pawn(getGame(), color, currentRow, currentColumn);
+	}
 }

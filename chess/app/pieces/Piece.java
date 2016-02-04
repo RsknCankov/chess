@@ -7,13 +7,13 @@ import models.Game;
 
 public abstract class Piece {
 	protected Color color;
-	protected Game game;
+	private Game game;
 	protected int currentRow;
 	protected int currentColumn;
 
 	public Piece(Game game, Color color, int currRow, int currColumn) {
 		this.color = color;
-		this.game = game;
+		this.setGame(game);
 		this.setCurrentColumn(currColumn);
 		this.setCurrentRow(currRow);
 	}
@@ -21,17 +21,25 @@ public abstract class Piece {
 	public Color getColor() {
 		return color;
 	}
+	public abstract Piece clone();
 
 	public boolean move(int toRow, int toColumn) {
 		for(Move move : getPossibleMoves(toRow, toColumn)){
 			boolean legal = move.isLegal();
 			if(legal){
 				move.applyEffects();
-				game.addMoveToHistory(move);
+				getGame().addMoveToHistory(move);
 				return true;
 			}
 		}
 		return false;
+	}
+	public boolean canMove(int toRow, int toColumn){
+		boolean can = false;
+		for(Move move : getPossibleMoves(toRow, toColumn)){
+			can = can || move.isLegal();
+		}
+		return can;
 	}
 
 	
@@ -52,4 +60,12 @@ public abstract class Piece {
 		this.currentColumn = currentColumn;
 	}
 	public abstract List<Move> getPossibleMoves(int toRow, int toColumn);
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
 }
