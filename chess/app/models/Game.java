@@ -46,7 +46,7 @@ public class Game {
 	}
 
 	private void placeFirstRow(Color color) {
-		placePiece(new Rook(this, color, color.getFirstRow(), 1));
+		placePiece(new Rook(this, color, color.getFirstRow(), 0));
 		placePiece(new Knight(this, color, color.getFirstRow(), 1));
 		placePiece(new Bishop(this, color, color.getFirstRow(), 2));
 		placePiece(new Queen(this, color, color.getFirstRow(), 3));
@@ -71,7 +71,18 @@ public class Game {
 		if (piece == null || piece.getColor() != currentTurnColor)
 			return false;
 		boolean moved = piece.move(toRow, toColumn);
+		if(moved){
+			switchCurrentColor();
+		}
 		return moved;
+	}
+
+	private void switchCurrentColor() {
+		if(currentTurnColor == Color.WHITE){
+			currentTurnColor = Color.BLACK;
+		} else {
+			currentTurnColor = Color.WHITE;
+		}
 	}
 
 	public void addMoveToHistory(Move move) {
@@ -102,7 +113,7 @@ public class Game {
 					for (int toColumn = 0; toColumn < 8; ++toColumn) {
 						Piece fromPiece = getBoard()[fromRow][fromColumn];
 						Piece toPiece = getBoard()[toRow][toColumn];
-						if (fromPiece != null && toPiece != null && toPiece instanceof King) {
+						if (fromPiece != null && toPiece != null && toPiece instanceof King && fromPiece.canMove(toRow, toColumn)) {
 							return toPiece.getColor();
 						}
 					}
