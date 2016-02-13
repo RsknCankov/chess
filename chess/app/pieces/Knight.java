@@ -14,7 +14,7 @@ public class Knight extends Piece {
 
 	@Override
 	public List<Move> getPossibleMoves(int toRow, int toColumn) {
-		int dx[] = { -1, 1, 2, 2, 1, -1, -2, -1 };
+		int dx[] = { -1, 1, 2, 2, 1, -1, -2, -2 };
 		int dy[] = {2, 2, -1, 1, -2, -2, -1, 1};
 		List<Move> moves = new ArrayList<>();
 		for (int i = 0; i < dx.length; ++i) {

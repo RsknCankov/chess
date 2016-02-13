@@ -26,7 +26,7 @@ public class WebSocketHandler extends WebSocket<String> {
 				int fromCol = Integer.valueOf(splitted[1]);
 				int toRow = Integer.valueOf(splitted[2]);
 				int toCol = Integer.valueOf(splitted[3]);
-				boolean moveMade = game.makeMove(fromRow, fromCol, toRow, toCol, true);
+				boolean moveMade = game.makeMove(fromRow, fromCol, toRow, toCol, false);
 				out.write(moveMade+ "");
 				
 			}
@@ -40,7 +40,7 @@ public class WebSocketHandler extends WebSocket<String> {
 				int type;
 				if(p!=null){
 					type = p.getId();
-					if(p.getColor() == Color.BLACK){
+					if(p.getColor() == Color.WHITE){
 						type+=6;
 					}
 				} else {

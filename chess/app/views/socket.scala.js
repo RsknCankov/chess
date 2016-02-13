@@ -36,7 +36,7 @@ $(function() {
     		var val = $('#txt').val();
     		socket.send(val);
     	});
-    var table = $('<table></table>').addClass('foo');
+    var table = $('<table cellspacing="0" cellpadding="0"></table>').addClass('foo');
     
     for(i=0; i<8; i++){
         var row = $('<tr></tr>');
@@ -63,7 +63,9 @@ $(function() {
         var emptySquareImg = getImgUrl(12, getColor(rowIndex, colIndex));
         if(currentClicked === undefined){
         	if (emptySquareImg != $(this).attr('src')){
-        		currentClicked = $(this);        		
+        		currentClicked = $(this);        
+        	    $('.selected').removeClass('selected');
+        	    $(this).addClass('selected');
         	}
         } else {
         	var fromRow = currentClicked.parent().parent().children().index(currentClicked.parent());

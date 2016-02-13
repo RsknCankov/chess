@@ -2,4 +2,6 @@
     width : 70px; 
     height: auto;
 }
-
+.selected{
+    border: 2px solid blue;
+}

@@ -68,9 +68,10 @@ public abstract class Move {
 		Game futureGame = game.clone();
 		System.out.println("1 0 original " + game.getBoard()[1][0]);
 		System.out.println("1 0 future g " + futureGame.getBoard()[1][0]);
-		futureGame.makeMove(fromRow, fromColumn, toRow, toColumn, false);
+		futureGame.makeMove(fromRow, fromColumn, toRow, toColumn, true);
 		Color checkedColor = futureGame.colorInCheck();
 		boolean leavesCurrentPlayerInCheck = checkedColor == piece.color;
+		System.out.println("CHECK FOR CHECK");
 		return leavesCurrentPlayerInCheck;
 	}
 
