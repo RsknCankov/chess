@@ -27,6 +27,11 @@ public class Knight extends Piece {
 	public Piece clone() {
 		return new Knight(getGame(), color, currentRow, currentColumn);
 	}
+
+	@Override
+	public int getId() {
+		return 3;
+	}
  
 
 }

@@ -28,5 +28,10 @@ public class Bishop extends Piece {
 		return new Bishop(getGame(), color, currentRow, currentColumn);
 	}
 
+	@Override
+	public int getId() {
+		return 2;
+	}
+
 	
 }

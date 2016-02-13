@@ -28,5 +28,10 @@ public class Rook extends Piece {
 		return new Rook(getGame(), color, currentRow, currentColumn);
 	}
 
+	@Override
+	public int getId() {
+		return 4;
+	}
+
 	 
 }

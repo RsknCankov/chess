@@ -17,14 +17,20 @@ public class Game {
 	private Piece[][] board = new Piece[8][8];
 	private Color currentTurnColor = Color.WHITE;
 	private List<Move> movesHistory = new ArrayList<>();
-
+	private List<WebSocketHandler> connections = new ArrayList<>();
+	
 	public Game() {
 		placeFirstRow(Color.WHITE);
 		placeFirstRow(Color.BLACK);
 		placePawnsRows(Color.WHITE);
 		placePawnsRows(Color.BLACK);
 	}
-
+	public void addConnection(WebSocketHandler connection){
+		connections.add(connection);
+	}
+	public void removeConnection(WebSocketHandler connection){
+		connections.remove(connection);
+	}
 	public Game clone() {
 		Game newGame = new Game();
 		Piece[][] newBoard = new Piece[8][8];
@@ -66,17 +72,23 @@ public class Game {
 		getBoard()[piece.getCurrentRow()][piece.getCurrentColumn()] = piece;
 	}
 
-	public boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn) {
+	public boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn, boolean skipCheck) {
 		Piece piece = getBoard()[fromRow][fromColumn];
 		if (piece == null || piece.getColor() != currentTurnColor)
 			return false;
-		boolean moved = piece.move(toRow, toColumn);
+		boolean moved = piece.move(toRow, toColumn, skipCheck);
 		if(moved){
 			switchCurrentColor();
+			refreshAllConnectionBoards();
 		}
 		return moved;
 	}
 
+	private void refreshAllConnectionBoards() {
+		for(WebSocketHandler conn : connections){
+			conn.refreshBoard();
+		}
+	}
 	private void switchCurrentColor() {
 		if(currentTurnColor == Color.WHITE){
 			currentTurnColor = Color.BLACK;
@@ -113,7 +125,7 @@ public class Game {
 					for (int toColumn = 0; toColumn < 8; ++toColumn) {
 						Piece fromPiece = getBoard()[fromRow][fromColumn];
 						Piece toPiece = getBoard()[toRow][toColumn];
-						if (fromPiece != null && toPiece != null && toPiece instanceof King && fromPiece.canMove(toRow, toColumn)) {
+						if (fromPiece != null && toPiece != null && toPiece instanceof King && fromPiece.canMove(toRow, toColumn, false)) {
 							return toPiece.getColor();
 						}
 					}

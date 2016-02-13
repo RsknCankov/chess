@@ -1,9 +1,13 @@
 @(gameId: Long)
 @main("Game") {
+ 
+
 <button id="btn" type="button">Click Me!</button>
-<input id="txt" type="text" value="Mickey">
+<input id="txt" type="text" value="1 0 2 0">
     <strong>Stats</strong><br>
     <div id="ping"></div>
 
-   <script type="text/javascript" charset="utf-8" src="@routes.Application.socketJs(gameId)"></script>
+	<script type="text/javascript" charset="utf-8" src="@routes.Application.socketJs(gameId)"></script>
+	<div id="here_table"></div>
+	 
 }

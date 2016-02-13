@@ -8,7 +8,6 @@ import org.h2.command.dml.Call;
 
 import models.Game;
 import models.GameManager;
-import models.Pinger;
 import models.WebSocketHandler;
 import play.libs.Akka;
 import play.libs.F.Callback;

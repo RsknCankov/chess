@@ -23,21 +23,21 @@ public abstract class Piece {
 	}
 	public abstract Piece clone();
 
-	public boolean move(int toRow, int toColumn) {
+	public boolean move(int toRow, int toColumn, boolean skipCheck) {
 		for(Move move : getPossibleMoves(toRow, toColumn)){
-			boolean legal = move.isLegal();
+			boolean legal = move.isLegal(skipCheck);
 			if(legal){
-				move.applyEffects();
+				move.applyEffects(game);
 				getGame().addMoveToHistory(move);
 				return true;
 			}
 		}
 		return false;
 	}
-	public boolean canMove(int toRow, int toColumn){
+	public boolean canMove(int toRow, int toColumn, boolean skipCheck){
 		boolean can = false;
 		for(Move move : getPossibleMoves(toRow, toColumn)){
-			can = can || move.isLegal();
+			can = can || move.isLegal(skipCheck);
 		}
 		return can;
 	}
@@ -68,4 +68,5 @@ public abstract class Piece {
 	public void setGame(Game game) {
 		this.game = game;
 	}
+	public abstract int getId();
 }

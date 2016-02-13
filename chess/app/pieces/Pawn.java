@@ -72,7 +72,7 @@ public class Pawn extends Piece {
 			effects.add(new MoveEffect() {
 				
 				@Override
-				public void apply() {
+				public void apply(Game game) {
 					game.getBoard()[toRow-getDx()][toColumn] = null;
 				}
 			});
@@ -83,5 +83,10 @@ public class Pawn extends Piece {
 	@Override
 	public Piece clone() {
 		return new Pawn(getGame(), color, currentRow, currentColumn);
+	}
+
+	@Override
+	public int getId() {
+		return 5;
 	}
 }

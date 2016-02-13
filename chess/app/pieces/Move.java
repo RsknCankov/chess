@@ -60,18 +60,17 @@ public abstract class Move {
 		return false;
 	}
 
-	public boolean isLegal() {
-		return canReachEnd() && satisfiesConditions() && !leavesCurrentPlayerInCheck();
+	public boolean isLegal(boolean skipCheck) {
+		return canReachEnd() && satisfiesConditions() && (skipCheck || !leavesCurrentPlayerInCheck());
 	}
 
 	private boolean leavesCurrentPlayerInCheck() {
-		Game oldGame = game;
 		Game futureGame = game.clone();
-		game = futureGame;
-		applyEffects();
-		Color checkedColor = game.colorInCheck();
+		System.out.println("1 0 original " + game.getBoard()[1][0]);
+		System.out.println("1 0 future g " + futureGame.getBoard()[1][0]);
+		futureGame.makeMove(fromRow, fromColumn, toRow, toColumn, false);
+		Color checkedColor = futureGame.colorInCheck();
 		boolean leavesCurrentPlayerInCheck = checkedColor == piece.color;
-		game = oldGame;
 		return leavesCurrentPlayerInCheck;
 	}
 
@@ -79,9 +78,9 @@ public abstract class Move {
 		return game.getBoard()[toRow][toColumn]==null || game.getBoard()[toRow][toColumn].color!= piece.color;
 	}
 
-	public void applyEffects() {
+	public void applyEffects(Game game) {
 		for(MoveEffect effect : getEffects()){
-			effect.apply();
+			effect.apply(game);
 		}
 	}
 

@@ -28,4 +28,9 @@ public class Queen extends Piece {
 		return new Queen(getGame(), color, currentColumn, currentColumn);
 	}
 
+	@Override
+	public int getId() {
+		return 1;
+	}
+
 }

@@ -59,7 +59,7 @@ public class King extends Piece {
 			List<MoveEffect> effects = super.getEffects();
 			effects.add(new MoveEffect() {
 				@Override
-				public void apply() {
+				public void apply(Game game) {
 					if (toColumn > currentColumn) {
 						game.getBoard()[toRow][toColumn - 1] = game.getBoard()[toRow][7];
 						game.getBoard()[toRow][7] = null;
@@ -76,6 +76,11 @@ public class King extends Piece {
 	@Override
 	public Piece clone() {
 		return new King(getGame(), color, currentRow, currentColumn);
+	}
+
+	@Override
+	public int getId() {
+		return 0;
 	}
 
 }
