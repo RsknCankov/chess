@@ -17,9 +17,6 @@ public class SimpleMove extends Move {
 		effects.add(new MoveEffect() {
 			@Override
 			public void apply(Game game) {
-				System.out.println("applying to " + piece);
-				int a = piece.getCurrentRow();
-				int b = piece.getCurrentColumn();
 				game.getBoard()[piece.getCurrentRow()][piece.getCurrentColumn()] = null;
 				game.getBoard()[toRow][toColumn] = piece;
 				piece.setCurrentRow(toRow);

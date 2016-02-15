@@ -72,6 +72,7 @@ $(function() {
         	var fromCol = currentClicked.parent().children().index(currentClicked);
         	makeMove(fromRow, fromCol, rowIndex, colIndex);
         	currentClicked = undefined;
+        	$('.selected').removeClass('selected');
         	//alert("making move " + fromRow + " " + fromCol + " " + rowIndex + " " + colIndex);
         }
        // alert(currentClicked);

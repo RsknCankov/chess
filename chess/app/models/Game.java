@@ -73,6 +73,7 @@ public class Game {
 	}
 
 	public boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn, boolean skipCheck) {
+		System.out.println("MAKE MOVE " + skipCheck);
 		Piece piece = getBoard()[fromRow][fromColumn];
 		if (piece == null || piece.getColor() != currentTurnColor)
 			return false;
@@ -112,20 +113,21 @@ public class Game {
 	public boolean wasMoved(int x, int y) {
 		for (Move move : movesHistory) {
 			if (move.getFromRow() == x && move.getFromColumn() == y) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	public Color colorInCheck() {
+		System.out.println("COLOR IN CHECK");
 		for (int fromRow = 0; fromRow < 8; ++fromRow) {
 			for (int fromColumn = 0; fromColumn < 8; ++fromColumn) {
 				for (int toRow = 0; toRow < 8; ++toRow) {
 					for (int toColumn = 0; toColumn < 8; ++toColumn) {
 						Piece fromPiece = getBoard()[fromRow][fromColumn];
 						Piece toPiece = getBoard()[toRow][toColumn];
-						if (fromPiece != null && toPiece != null && toPiece instanceof King && fromPiece.canMove(toRow, toColumn, false)) {
+						if (fromPiece != null && toPiece != null && toPiece instanceof King && fromPiece.canMove(toRow, toColumn, true)) {
 							return toPiece.getColor();
 						}
 					}

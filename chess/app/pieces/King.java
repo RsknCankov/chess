@@ -1,6 +1,7 @@
 package pieces;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import akka.routing.FromConfig;
@@ -22,6 +23,7 @@ public class King extends Piece {
 			moves.add(new SimpleMove(dx[i], dy[i], toRow, toColumn, 1, this));
 		}
 		moves.add(new CastlingMove(0, 2, toRow, toColumn, 1, this));
+		moves.add(new CastlingMove(0, -2, toRow, toColumn, 1, this));
 		return moves;
 	}
 
@@ -63,12 +65,18 @@ public class King extends Piece {
 					if (toColumn > currentColumn) {
 						game.getBoard()[toRow][toColumn - 1] = game.getBoard()[toRow][7];
 						game.getBoard()[toRow][7] = null;
+						game.getBoard()[toRow][toColumn - 1].setCurrentRow(toRow);
+						game.getBoard()[toRow][toColumn - 1].setCurrentColumn(toColumn-1);
 					} else {
 						game.getBoard()[toRow][toColumn + 1] = game.getBoard()[toRow][0];
 						game.getBoard()[toRow][0] = null;
+						game.getBoard()[toRow][toColumn + 1].setCurrentRow(toRow);
+						game.getBoard()[toRow][toColumn + 1].setCurrentRow(toColumn+1);
+						
 					}
 				}
 			});
+			Collections.reverse(effects);
 			return effects;
 		}
 	}
