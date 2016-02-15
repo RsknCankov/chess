@@ -77,14 +77,25 @@ public class Game {
 		Piece piece = getBoard()[fromRow][fromColumn];
 		if (piece == null || piece.getColor() != currentTurnColor)
 			return false;
-		boolean moved = piece.move(toRow, toColumn, skipCheck);
-		if(moved){
+		Move move = piece.move(toRow, toColumn, skipCheck);
+		if(move != null){
 			switchCurrentColor();
 			refreshAllConnectionBoards();
+			sendMessage(move.toString());
+			Color color = colorInCheck();
+			if(color!= null){
+				sendMessage("Check");
+			}
+			return true;
+		} else {
+			return false;
 		}
-		return moved;
 	}
-
+	private void sendMessage(String msg){
+		for(WebSocketHandler conn : connections){
+			conn.sendMessage(msg);
+		}
+	}
 	private void refreshAllConnectionBoards() {
 		for(WebSocketHandler conn : connections){
 			conn.refreshBoard();

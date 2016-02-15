@@ -32,6 +32,11 @@ public class Knight extends Piece {
 	public int getId() {
 		return 3;
 	}
+
+	@Override
+	public String getName() {
+		return "Knight";
+	}
  
 
 }

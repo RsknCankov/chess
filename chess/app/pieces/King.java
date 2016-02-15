@@ -91,4 +91,9 @@ public class King extends Piece {
 		return 0;
 	}
 
+	@Override
+	public String getName() {
+		return "King";
+	}
+
 }

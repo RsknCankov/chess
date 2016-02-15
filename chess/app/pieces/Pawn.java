@@ -91,4 +91,9 @@ public class Pawn extends Piece {
 	public int getId() {
 		return 5;
 	}
+
+	@Override
+	public String getName() {
+		return "Pawn";
+	}
 }

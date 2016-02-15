@@ -33,4 +33,9 @@ public class Queen extends Piece {
 		return 1;
 	}
 
+	@Override
+	public String getName() {
+		return "Queen";
+	}
+
 }

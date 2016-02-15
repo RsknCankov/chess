@@ -1,5 +1,6 @@
 @(gameId: Long)
 $(function() {
+	var moves = 0;
     var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
     var socket = new WS("@routes.Application.socketWs(gameId).webSocketURL(request)")
 
@@ -23,8 +24,11 @@ $(function() {
     var receiveEvent = function(event) {
     	var id = event.data.split(" ")[0];
     	var type = event.data.split(" ")[1];
-   
-        changeImageType(Math.floor(id/8), id%8, type);
+    	if(id == -1){
+    		jQuery("#moves_list").prepend("<div>"+event.data.substring(2)+ '</div>');
+    	} else {
+    		changeImageType(Math.floor(id/8), id%8, type);    		
+    	}
     }
     socket.onmessage = receiveEvent
     
@@ -32,10 +36,7 @@ $(function() {
     	var msg = "" + fromRow + " " + fromColumn + " " + toRow + " " + toColumn;
     	socket.send(msg);
     } 
-    $("#btn" ).click(function() {
-    		var val = $('#txt').val();
-    		socket.send(val);
-    	});
+    
     var table = $('<table cellspacing="0" cellpadding="0"></table>').addClass('foo');
     
     for(i=0; i<8; i++){

@@ -1,5 +1,6 @@
 package models;
 
+import pieces.Move;
 import pieces.Piece;
 import play.libs.F.Callback;
 import play.mvc.WebSocket;
@@ -16,7 +17,9 @@ public class WebSocketHandler extends WebSocket<String> {
 		this.out = out;
 		game.addConnection(this);
 		refreshBoard();
-		
+		for(Move move : game.getMovesHistory()){
+			sendMessage(move.toString());
+		}
 		in.onMessage(new Callback<String>() {
 
 			@Override
@@ -49,6 +52,9 @@ public class WebSocketHandler extends WebSocket<String> {
 				out.write(i*8+j + " " + type);
 			}
 		}
+	}
+	public void sendMessage(String msg) {
+		out.write("-1 " + msg);
 	}
 
 }

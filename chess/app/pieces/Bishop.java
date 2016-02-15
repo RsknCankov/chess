@@ -33,5 +33,10 @@ public class Bishop extends Piece {
 		return 2;
 	}
 
+	@Override
+	public String getName() {
+		return "Bishop";
+	}
+
 	
 }

@@ -75,11 +75,11 @@ public abstract class Move {
 	}
 
 	protected boolean satisfiesConditions() {
-		return game.getBoard()[toRow][toColumn]==null || game.getBoard()[toRow][toColumn].color!= piece.color;
+		return game.getBoard()[toRow][toColumn] == null || game.getBoard()[toRow][toColumn].color != piece.color;
 	}
 
 	public void applyEffects(Game game) {
-		for(MoveEffect effect : getEffects()){
+		for (MoveEffect effect : getEffects()) {
 			effect.apply(game);
 		}
 		setTimestamp(new Date());
@@ -99,6 +99,22 @@ public abstract class Move {
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	@Override
+	public String toString() {
+		String s = "";
+		if (piece.getColor() == Color.WHITE) {
+			s += "White ";
+		} else {
+			s += "Black ";
+		}
+		s += piece.getName();
+		s += " from ";
+		s += (char)(fromColumn + 'a') + "" + (fromRow+1);
+		s += " to ";
+		s += (char)(toColumn + 'a') + "" + (toRow+1);
+		return s;
 	}
 
 }
