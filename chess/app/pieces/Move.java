@@ -1,5 +1,6 @@
 package pieces;
 
+import java.util.Date;
 import java.util.List;
 
 import models.Color;
@@ -15,6 +16,7 @@ public abstract class Move {
 	protected Game game;
 	private int fromRow;
 	private int fromColumn;
+	private Date timestamp;
 
 	public Move(int dx, int dy, int toRow, int toColumn, int allowedSteps, Piece piece) {
 		this.dx = dx;
@@ -80,6 +82,7 @@ public abstract class Move {
 		for(MoveEffect effect : getEffects()){
 			effect.apply(game);
 		}
+		setTimestamp(new Date());
 	}
 
 	public int getFromRow() {
@@ -88,6 +91,14 @@ public abstract class Move {
 
 	public int getFromColumn() {
 		return fromColumn;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }
