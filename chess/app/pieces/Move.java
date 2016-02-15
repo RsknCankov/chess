@@ -63,7 +63,10 @@ public abstract class Move {
 	}
 
 	public boolean isLegal(boolean skipCheck) {
-		return canReachEnd() && satisfiesConditions() && (skipCheck || !leavesCurrentPlayerInCheck());
+		boolean canReach = canReachEnd();
+		boolean satisfies = satisfiesConditions();
+		boolean doesntLeavePlayerInCheck = skipCheck || !leavesCurrentPlayerInCheck();
+		return canReach && satisfies && doesntLeavePlayerInCheck;
 	}
 
 	private boolean leavesCurrentPlayerInCheck() {

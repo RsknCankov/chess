@@ -18,25 +18,28 @@ public class Game {
 	private Color currentTurnColor = Color.WHITE;
 	private List<Move> movesHistory = new ArrayList<>();
 	private List<WebSocketHandler> connections = new ArrayList<>();
-	
+
 	public Game() {
 		placeFirstRow(Color.WHITE);
 		placeFirstRow(Color.BLACK);
 		placePawnsRows(Color.WHITE);
 		placePawnsRows(Color.BLACK);
 	}
-	public void addConnection(WebSocketHandler connection){
+
+	public void addConnection(WebSocketHandler connection) {
 		connections.add(connection);
 	}
-	public void removeConnection(WebSocketHandler connection){
+
+	public void removeConnection(WebSocketHandler connection) {
 		connections.remove(connection);
 	}
+
 	public Game clone() {
 		Game newGame = new Game();
 		Piece[][] newBoard = new Piece[8][8];
-		for(int i=0; i<newBoard.length; ++i){
-			for(int j=0; j<newBoard[i].length; ++j){
-				if(board[i][j] != null){
+		for (int i = 0; i < newBoard.length; ++i) {
+			for (int j = 0; j < newBoard[i].length; ++j) {
+				if (board[i][j] != null) {
 					newBoard[i][j] = board[i][j].clone();
 					newBoard[i][j].setGame(newGame);
 				}
@@ -78,31 +81,54 @@ public class Game {
 		if (piece == null || piece.getColor() != currentTurnColor)
 			return false;
 		Move move = piece.move(toRow, toColumn, skipCheck);
-		if(move != null){
+		if (move != null) {
 			switchCurrentColor();
 			refreshAllConnectionBoards();
 			sendMessage(move.toString());
 			Color color = colorInCheck();
-			if(color!= null){
-				sendMessage("Check");
+			if (color != null) {
+				if (skipCheck || canMakeMove(color)) {
+					sendMessage("Check");
+				} else {
+					sendMessage("Checkmate");
+				}
 			}
 			return true;
 		} else {
 			return false;
 		}
 	}
-	private void sendMessage(String msg){
-		for(WebSocketHandler conn : connections){
+
+	private void sendMessage(String msg) {
+		for (WebSocketHandler conn : connections) {
 			conn.sendMessage(msg);
 		}
 	}
+
+	private boolean canMakeMove(Color color) {
+		for (int fromRow = 0; fromRow < 8; ++fromRow) {
+			for (int fromColumn = 0; fromColumn < 8; ++fromColumn) {
+				for (int toRow = 0; toRow < 8; ++toRow) {
+					for (int toColumn = 0; toColumn < 8; ++toColumn) {
+						Piece piece = getBoard()[fromRow][fromColumn];
+						if (piece != null && piece.getColor() == color && piece.canMove(toRow, toColumn, false)) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	private void refreshAllConnectionBoards() {
-		for(WebSocketHandler conn : connections){
+		for (WebSocketHandler conn : connections) {
 			conn.refreshBoard();
 		}
 	}
+
 	private void switchCurrentColor() {
-		if(currentTurnColor == Color.WHITE){
+		if (currentTurnColor == Color.WHITE) {
 			currentTurnColor = Color.BLACK;
 		} else {
 			currentTurnColor = Color.WHITE;
@@ -131,14 +157,14 @@ public class Game {
 	}
 
 	public Color colorInCheck() {
-		System.out.println("COLOR IN CHECK");
 		for (int fromRow = 0; fromRow < 8; ++fromRow) {
 			for (int fromColumn = 0; fromColumn < 8; ++fromColumn) {
 				for (int toRow = 0; toRow < 8; ++toRow) {
 					for (int toColumn = 0; toColumn < 8; ++toColumn) {
 						Piece fromPiece = getBoard()[fromRow][fromColumn];
 						Piece toPiece = getBoard()[toRow][toColumn];
-						if (fromPiece != null && toPiece != null && toPiece instanceof King && fromPiece.canMove(toRow, toColumn, true)) {
+						if (fromPiece != null && toPiece != null && toPiece instanceof King
+								&& fromPiece.canMove(toRow, toColumn, true)) {
 							return toPiece.getColor();
 						}
 					}
