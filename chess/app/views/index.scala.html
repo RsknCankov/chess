@@ -1,0 +1,7 @@
+@(username: String)
+@main("Home") {
+ <div>Hello @username</div>
+ <a href='@routes.Application.login()'>Login</a>
+ <a href='@routes.Application.register()'>Register</a>	 
+ <a href='@routes.Application.logout()'>Logout</a>
+}

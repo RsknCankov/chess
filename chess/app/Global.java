@@ -1,3 +1,7 @@
+import java.net.URISyntaxException;
+import java.sql.SQLException;
+
+import models.Database;
 import play.*;
 
 public class Global extends GlobalSettings {
