@@ -1,0 +1,14 @@
+@(gameIds :List[Long])
+@main("New game") {
+
+@helper.form(action = routes.Application.newGamePost()) {
+	<ul class="list-group">
+	@for(id <- gameIds) {
+		<li class="list-group-item">
+  			<a href='@routes.Application.game(id)'>Game #@id</a>
+		</li>
+	}
+	</ul>
+}
+	 
+}

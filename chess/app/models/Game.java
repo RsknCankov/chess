@@ -14,12 +14,17 @@ import pieces.Rook;
 
 public class Game {
 	private long id;
+	private String whitePlayer;
+	private String blackPlayer;
 	private Piece[][] board = new Piece[8][8];
 	private Color currentTurnColor = Color.WHITE;
 	private List<Move> movesHistory = new ArrayList<>();
 	private List<WebSocketHandler> connections = new ArrayList<>();
 
-	public Game() {
+	public Game(long id,String whitePlayer, String blackPlayer) {
+		this.setId(id);
+		this.setWhitePlayer(whitePlayer);
+		this.setBlackPlayer(blackPlayer);
 		placeFirstRow(Color.WHITE);
 		placeFirstRow(Color.BLACK);
 		placePawnsRows(Color.WHITE);
@@ -35,7 +40,7 @@ public class Game {
 	}
 
 	public Game clone() {
-		Game newGame = new Game();
+		Game newGame = new Game(this.id, getWhitePlayer(), getBlackPlayer());
 		Piece[][] newBoard = new Piece[8][8];
 		for (int i = 0; i < newBoard.length; ++i) {
 			for (int j = 0; j < newBoard[i].length; ++j) {
@@ -45,7 +50,7 @@ public class Game {
 				}
 			}
 		}
-		newGame.id = id;
+		newGame.setId(id);
 		newGame.board = newBoard;
 		newGame.currentTurnColor = currentTurnColor;
 		List<Move> newMoves = new ArrayList<>();
@@ -172,5 +177,34 @@ public class Game {
 			}
 		}
 		return null;
+	}
+
+	public boolean usernameCanMakeMove(String username) {
+		if(username == null) return false;
+		return currentTurnColor == Color.WHITE && username.equals(getWhitePlayer()) || currentTurnColor==Color.BLACK && username.equals(getBlackPlayer());		
+	}
+
+	public String getWhitePlayer() {
+		return whitePlayer;
+	}
+
+	public void setWhitePlayer(String whitePlayer) {
+		this.whitePlayer = whitePlayer;
+	}
+
+	public String getBlackPlayer() {
+		return blackPlayer;
+	}
+
+	public void setBlackPlayer(String blackPlayer) {
+		this.blackPlayer = blackPlayer;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 }

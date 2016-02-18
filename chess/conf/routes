@@ -12,5 +12,8 @@ POST	/login								controllers.Application.loginPost()
 GET		/register							controllers.Application.register()
 POST	/register							controllers.Application.registerPost()
 GET		/logout								controllers.Application.logout()
+GET		/newGame							controllers.Application.newGame()
+POST	/newGamePost						controllers.Application.newGamePost()
+GET		/myGames							controllers.Application.myGames()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

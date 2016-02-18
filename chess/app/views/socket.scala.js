@@ -25,7 +25,7 @@ $(function() {
     	var id = event.data.split(" ")[0];
     	var type = event.data.split(" ")[1];
     	if(id == -1){
-    		jQuery("#moves_list").prepend("<div>"+event.data.substring(2)+ '</div>');
+    		jQuery("#moves_list").prepend("<li class='list-group-item'>"+event.data.substring(2)+ '</li>');
     	} else {
     		changeImageType(Math.floor(id/8), id%8, type);    		
     	}

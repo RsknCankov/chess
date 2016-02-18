@@ -2,6 +2,8 @@ package controllers;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.h2.command.dml.Call;
@@ -9,6 +11,7 @@ import org.h2.command.dml.Call;
 import models.Database;
 import models.Game;
 import models.GameManager;
+import models.NewGameForm;
 import models.UserForm;
 import models.WebSocketHandler;
 import play.data.Form;
@@ -31,7 +34,7 @@ public class Application extends Controller {
 		if (game == null) {
 			return WebSocket.reject(forbidden());
 		}
-		return new WebSocketHandler(game);
+		return new WebSocketHandler(game, session("username"));
 	}
 
 	public Result socketJs(long gameId) {
@@ -79,5 +82,29 @@ public class Application extends Controller {
 
 	public Result game(long id) {
 		return ok(game.render(id));
+	}
+	public Result newGame(){
+		return ok(views.html.newGame.render());
+	}
+	public Result newGamePost(){
+		Form<NewGameForm> form = Form.form(NewGameForm.class);
+		NewGameForm ngf = form.bindFromRequest().get();
+		if(Database.usernameExists(ngf.whitePlayerUsername) && Database.usernameExists(ngf.blackPlayerUsername)){
+			long newGame = GameManager.newGame(ngf.whitePlayerUsername, ngf.blackPlayerUsername);
+			return redirect(controllers.routes.Application.game(newGame));
+		} else {
+			return ok("No such usernames");
+		}
+		
+	}
+	public Result myGames(){
+		String username = session("username");
+		List<Long> gameIds = new ArrayList<>();
+		for(Game game : GameManager.games.values()){
+			if(game.getWhitePlayer().equals(username) || game.getBlackPlayer().equals(username)){
+				gameIds.add(game.getId());
+			}
+		}
+		return ok(views.html.myGames.render(gameIds));
 	}
 }
