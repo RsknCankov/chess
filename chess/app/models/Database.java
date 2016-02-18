@@ -12,14 +12,16 @@ public class Database {
 	public static Connection getConnection() {
 		try {
 //	    URI dbUri = new URI(System.getenv("DATABASE_URL"));
-	    /*
-	    String username = "lktiynoaqxxbtq"; //dbUri.getUserInfo().split(":")[0];
-	    String password =  "SwuRqwzxmSIFCalPx4h4UGfPq7";//dbUri.getUserInfo().split(":")[1];
-	    String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-*/
+
+	    String username = "lktiynoaqxxbtq";
+	    String password =  "SwuRqwzxmSIFCalPx4h4UGfPq7";
+	    String dbUrl = "jdbc:postgresql://ec2-54-83-29-133.compute-1.amazonaws.com:5432/d8jkrnoohrqusm";
+
+			/*
 	    String username = "postgres";
 	    String password = "123456";
 	    String dbUrl = "jdbc:postgresql://localhost:5432/mydb";
+	    */
 			return DriverManager.getConnection(dbUrl, username, password);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
