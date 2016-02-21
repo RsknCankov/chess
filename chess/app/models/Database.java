@@ -12,18 +12,16 @@ public class Database {
 	public static Connection getConnection() {
 		try {
 			// Heroku credentials
-			/*
-			 * String username = "lktiynoaqxxbtq"; String password =
-			 * "SwuRqwzxmSIFCalPx4h4UGfPq7"; String dbUrl =
-			 * "jdbc:postgresql://ec2-54-83-29-133.compute-1.amazonaws.com:5432/d8jkrnoohrqusm";
-			 */
+
+			String username = "lktiynoaqxxbtq";
+			String password = "SwuRqwzxmSIFCalPx4h4UGfPq7";
+			String dbUrl = "jdbc:postgresql://ec2-54-83-29-133.compute-1.amazonaws.com:5432/d8jkrnoohrqusm";
 
 			// Local credentials
-
-			String username = "postgres";
-			String password = "123456";
-			String dbUrl = "jdbc:postgresql://localhost:5432/mydb";
-
+			/*
+			 * String username = "postgres"; String password = "123456"; String
+			 * dbUrl = "jdbc:postgresql://localhost:5432/mydb";
+			 */
 			return DriverManager.getConnection(dbUrl, username, password);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

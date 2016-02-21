@@ -2,6 +2,9 @@
     width : 70px; 
     height: auto;
 }
-.selected{
+.selected img{
+    border: 2px solid yellow;
+}
+td img{
     border: 2px solid blue;
 }
