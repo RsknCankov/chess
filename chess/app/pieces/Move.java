@@ -6,6 +6,7 @@ import java.util.List;
 import models.Color;
 import models.Game;
 
+/* Class representing a move, with methods to check if its legal */
 public abstract class Move {
 	private int dx;
 	private int dy;
@@ -44,6 +45,10 @@ public abstract class Move {
 
 	public abstract List<MoveEffect> getEffects();
 
+	/*
+	 * Checks if the piece is allowed to move to the end destination on the
+	 * board
+	 */
 	protected final boolean canReachEnd() {
 		if (piece == null)
 			return false;
@@ -61,14 +66,14 @@ public abstract class Move {
 		}
 		return false;
 	}
-
+	/* Checks if the move is legal */
 	public boolean isLegal(boolean skipCheck) {
 		boolean canReach = canReachEnd();
 		boolean satisfies = satisfiesConditions();
 		boolean doesntLeavePlayerInCheck = skipCheck || !leavesCurrentPlayerInCheck();
 		return canReach && satisfies && doesntLeavePlayerInCheck;
 	}
-
+	/* Checks if this move will leave the player in check */ 
 	private boolean leavesCurrentPlayerInCheck() {
 		Game futureGame = game.clone();
 		futureGame.makeMove(fromRow, fromColumn, toRow, toColumn, true);
@@ -76,11 +81,11 @@ public abstract class Move {
 		boolean leavesCurrentPlayerInCheck = checkedColor == piece.color;
 		return leavesCurrentPlayerInCheck;
 	}
-
+	/* Checks if the move satisfies any special conditions required */
 	protected boolean satisfiesConditions() {
 		return game.getBoard()[toRow][toColumn] == null || game.getBoard()[toRow][toColumn].color != piece.color;
 	}
-
+	/* Applies the effects of the move to the board */
 	public void applyEffects(Game game) {
 		for (MoveEffect effect : getEffects()) {
 			effect.apply(game);
@@ -114,9 +119,9 @@ public abstract class Move {
 		}
 		s += piece.getName();
 		s += " from ";
-		s += (char)(fromColumn + 'a') + "" + (fromRow+1);
+		s += (char) (fromColumn + 'a') + "" + (fromRow + 1);
 		s += " to ";
-		s += (char)(toColumn + 'a') + "" + (toRow+1);
+		s += (char) (toColumn + 'a') + "" + (toRow + 1);
 		return s;
 	}
 

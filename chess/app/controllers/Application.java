@@ -29,6 +29,9 @@ import akka.actor.Cancellable;
 import akka.actor.Props;
 
 public class Application extends Controller {
+	/*
+	 * Opening a socket to send and receive events for a particular game
+	 */
 	public WebSocket<String> socketWs(long gameId) {
 		Game game = GameManager.games.get(gameId);
 		if (game == null) {
@@ -44,22 +47,24 @@ public class Application extends Controller {
 	public Result login() {
 		return ok(login.render());
 	}
-	public Result register(){
+
+	public Result register() {
 		return ok(views.html.register.render());
 	}
+
+	/* Create a new account */
 	public Result registerPost() {
 		Form<UserForm> form = Form.form(UserForm.class);
 		UserForm uf = form.bindFromRequest().get();
-		System.out.println(uf.username + " " + uf.password);
-		boolean registered = Database.register(uf.username, uf.password);
-		System.out.println("REGISTERED: " + registered);
+		Database.register(uf.username, uf.password);
 		return redirect(controllers.routes.Application.index());
 	}
-	public Result loginPost(){
+
+	public Result loginPost() {
 		Form<UserForm> form = Form.form(UserForm.class);
 		UserForm uf = form.bindFromRequest().get();
 		boolean valid = Database.credentialsValid(uf.username, uf.password);
-		if(valid){
+		if (valid) {
 			session().clear();
 			session("username", uf.username);
 		} else {
@@ -67,15 +72,17 @@ public class Application extends Controller {
 		}
 		return redirect(controllers.routes.Application.index());
 	}
+
 	public Result index() {
 		Database.getConnection();
 		String username = session("username");
-		if(username == null){
+		if (username == null) {
 			username = "Guest";
 		}
 		return ok(views.html.index.render(username));
 	}
-	public Result logout(){
+
+	public Result logout() {
 		session().clear();
 		return redirect(controllers.routes.Application.index());
 	}
@@ -83,25 +90,30 @@ public class Application extends Controller {
 	public Result game(long id) {
 		return ok(game.render(id));
 	}
-	public Result newGame(){
+
+	public Result newGame() {
 		return ok(views.html.newGame.render());
 	}
-	public Result newGamePost(){
+
+	/* Create a new game */
+	public Result newGamePost() {
 		Form<NewGameForm> form = Form.form(NewGameForm.class);
 		NewGameForm ngf = form.bindFromRequest().get();
-		if(Database.usernameExists(ngf.whitePlayerUsername) && Database.usernameExists(ngf.blackPlayerUsername)){
+		if (Database.usernameExists(ngf.whitePlayerUsername) && Database.usernameExists(ngf.blackPlayerUsername)) {
 			long newGame = GameManager.newGame(ngf.whitePlayerUsername, ngf.blackPlayerUsername);
 			return redirect(controllers.routes.Application.game(newGame));
 		} else {
 			return ok("No such usernames");
 		}
-		
+
 	}
-	public Result myGames(){
+
+	/* Show all games that this users participates in */
+	public Result myGames() {
 		String username = session("username");
 		List<Long> gameIds = new ArrayList<>();
-		for(Game game : GameManager.games.values()){
-			if(game.getWhitePlayer().equals(username) || game.getBlackPlayer().equals(username)){
+		for (Game game : GameManager.games.values()) {
+			if (game.getWhitePlayer().equals(username) || game.getBlackPlayer().equals(username)) {
 				gameIds.add(game.getId());
 			}
 		}

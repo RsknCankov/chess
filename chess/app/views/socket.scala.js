@@ -2,7 +2,7 @@
 $(function() {
 	var moves = 0;
     var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
-    var socket = new WS("@routes.Application.socketWs(gameId).webSocketURL(request, true)")
+    var socket = new WS("@routes.Application.socketWs(gameId).webSocketURL(request, false)")
 
     var getImgUrl = function(type, color) {
     	return '/assets/images/' + type + '_' + color +'.png';	

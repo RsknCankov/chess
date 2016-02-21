@@ -12,6 +12,7 @@ import pieces.Piece;
 import pieces.Queen;
 import pieces.Rook;
 
+/* Class that represents a Game, the main interface of the application */
 public class Game {
 	private long id;
 	private String whitePlayer;
@@ -21,7 +22,7 @@ public class Game {
 	private List<Move> movesHistory = new ArrayList<>();
 	private List<WebSocketHandler> connections = new ArrayList<>();
 
-	public Game(long id,String whitePlayer, String blackPlayer) {
+	public Game(long id, String whitePlayer, String blackPlayer) {
 		this.setId(id);
 		this.setWhitePlayer(whitePlayer);
 		this.setBlackPlayer(blackPlayer);
@@ -59,6 +60,7 @@ public class Game {
 		return newGame;
 	}
 
+	/* Places the piece on the first row, for the given player color */
 	private void placeFirstRow(Color color) {
 		placePiece(new Rook(this, color, color.getFirstRow(), 0));
 		placePiece(new Knight(this, color, color.getFirstRow(), 1));
@@ -70,6 +72,7 @@ public class Game {
 		placePiece(new Rook(this, color, color.getFirstRow(), 7));
 	}
 
+	/* Places all the pawn for the given color */
 	private void placePawnsRows(Color color) {
 		for (int i = 0; i < 8; ++i) {
 			placePiece(new Pawn(this, color, color.getSecondRow(), i));
@@ -80,8 +83,11 @@ public class Game {
 		getBoard()[piece.getCurrentRow()][piece.getCurrentColumn()] = piece;
 	}
 
+	/*
+	 * Tries to make a move from the given positions and returns whether a move
+	 * was made
+	 */
 	public boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn, boolean skipCheck) {
-		System.out.println("MAKE MOVE " + skipCheck);
 		Piece piece = getBoard()[fromRow][fromColumn];
 		if (piece == null || piece.getColor() != currentTurnColor)
 			return false;
@@ -104,12 +110,14 @@ public class Game {
 		}
 	}
 
+	/* Sends a message to all clients, subscribed to this game */
 	private void sendMessage(String msg) {
 		for (WebSocketHandler conn : connections) {
 			conn.sendMessage(msg);
 		}
 	}
 
+	/* Checks if the particular player can make any move for or is checkmated */
 	private boolean canMakeMove(Color color) {
 		for (int fromRow = 0; fromRow < 8; ++fromRow) {
 			for (int fromColumn = 0; fromColumn < 8; ++fromColumn) {
@@ -126,6 +134,7 @@ public class Game {
 		return false;
 	}
 
+	/* Update the board state for all current connections */
 	private void refreshAllConnectionBoards() {
 		for (WebSocketHandler conn : connections) {
 			conn.refreshBoard();
@@ -161,6 +170,10 @@ public class Game {
 		return false;
 	}
 
+	/*
+	 * Tries all possible moves and checks if there is a possible move to
+	 * capture the king
+	 */
 	public Color colorInCheck() {
 		for (int fromRow = 0; fromRow < 8; ++fromRow) {
 			for (int fromColumn = 0; fromColumn < 8; ++fromColumn) {
@@ -180,8 +193,10 @@ public class Game {
 	}
 
 	public boolean usernameCanMakeMove(String username) {
-		if(username == null) return false;
-		return currentTurnColor == Color.WHITE && username.equals(getWhitePlayer()) || currentTurnColor==Color.BLACK && username.equals(getBlackPlayer());		
+		if (username == null)
+			return false;
+		return currentTurnColor == Color.WHITE && username.equals(getWhitePlayer())
+				|| currentTurnColor == Color.BLACK && username.equals(getBlackPlayer());
 	}
 
 	public String getWhitePlayer() {

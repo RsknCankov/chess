@@ -4,7 +4,7 @@ import pieces.Move;
 import pieces.Piece;
 import play.libs.F.Callback;
 import play.mvc.WebSocket;
-
+/* Handles communication between the server and the clients during a game */
 public class WebSocketHandler extends WebSocket<String> {
 	private Game game;
 	private WebSocket.Out<String> out;
@@ -14,6 +14,9 @@ public class WebSocketHandler extends WebSocket<String> {
 		this.username = username;
 	
 	}
+	/* When a client connects he gets the current state of the board
+	 * and subscribes to future updates
+	 */
 	@Override
 	public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out) {
 		this.out = out;
@@ -32,12 +35,13 @@ public class WebSocketHandler extends WebSocket<String> {
 					int fromCol = Integer.valueOf(splitted[1]);
 					int toRow = Integer.valueOf(splitted[2]);
 					int toCol = Integer.valueOf(splitted[3]);
-					boolean moveMade = game.makeMove(fromRow, fromCol, toRow, toCol, false);
+					game.makeMove(fromRow, fromCol, toRow, toCol, false);
 				}				
 			}
 
 		});
 	}
+	/* Sends the current state of the board to the client */
 	public void refreshBoard(){
 		for(int i=0; i<8; ++i){
 			for(int j=0; j<8; ++j){
@@ -55,6 +59,7 @@ public class WebSocketHandler extends WebSocket<String> {
 			}
 		}
 	}
+	/* Sends a text message to the client */
 	public void sendMessage(String msg) {
 		out.write("-1 " + msg);
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import models.Color;
 import models.Game;
 
+/* Base class to represent a piece */
 public abstract class Piece {
 	protected Color color;
 	private Game game;
@@ -21,12 +22,17 @@ public abstract class Piece {
 	public Color getColor() {
 		return color;
 	}
+
 	public abstract Piece clone();
 
+	/*
+	 * Tries to move to the desired row and column and returns whether such a
+	 * move is possible
+	 */
 	public Move move(int toRow, int toColumn, boolean skipCheck) {
-		for(Move move : getPossibleMoves(toRow, toColumn)){
+		for (Move move : getPossibleMoves(toRow, toColumn)) {
 			boolean legal = move.isLegal(skipCheck);
-			if(legal){
+			if (legal) {
 				move.applyEffects(game);
 				getGame().addMoveToHistory(move);
 				return move;
@@ -34,15 +40,15 @@ public abstract class Piece {
 		}
 		return null;
 	}
-	public boolean canMove(int toRow, int toColumn, boolean skipCheck){
+
+	/* Checks if a move is possible, without actually moving */
+	public boolean canMove(int toRow, int toColumn, boolean skipCheck) {
 		boolean can = false;
-		for(Move move : getPossibleMoves(toRow, toColumn)){
+		for (Move move : getPossibleMoves(toRow, toColumn)) {
 			can = can || move.isLegal(skipCheck);
 		}
 		return can;
 	}
-
-	
 
 	public int getCurrentRow() {
 		return currentRow;
@@ -59,6 +65,11 @@ public abstract class Piece {
 	public void setCurrentColumn(int currentColumn) {
 		this.currentColumn = currentColumn;
 	}
+
+	/*
+	 * Returns a list of all possible moves this piece can make from its current
+	 * state
+	 */
 	public abstract List<Move> getPossibleMoves(int toRow, int toColumn);
 
 	public Game getGame() {
@@ -68,7 +79,8 @@ public abstract class Piece {
 	public void setGame(Game game) {
 		this.game = game;
 	}
+
 	public abstract int getId();
-	
+
 	public abstract String getName();
 }
